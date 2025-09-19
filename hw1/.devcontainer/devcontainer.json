@@ -1,0 +1,22 @@
+{
+  "name": "hw1 (PyTorch CPU)",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "jupyter.askForKernelRestart": false,
+        "jupyter.interactiveWindow.mode": "perFile"
+      }
+    }
+  }
+}
+
+
