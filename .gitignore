@@ -2,3 +2,5 @@ hw1/cifar10_data/*
 hw1/models/*
 **/.DS_Store
 hw1/docs/*
+hw3/*.pth
+hw3/*_data
