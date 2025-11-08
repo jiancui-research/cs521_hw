@@ -1,4 +1,4 @@
-# CS 521 Homework 4 - Alignment
+# CS 521 Homework 4
 
 ## Problem 1: Best-of-N Sampling
 
@@ -40,3 +40,35 @@ However, at large N (> 256), the proxy reward keeps going up while the ground tr
 This shows large N can increase the chance of reward hacking, i.e., the optimizer just finds and exploits flaws in the reward model, making the final performance actually degrades. 
 
 ![Problem 2c: Reward Hacking](figures/problem2c_reward_hacking.png)
+
+---
+
+## Problem 3: Explanations
+
+### Overview
+
+Implemented LIME and SmoothGrad explanation methods for ResNet-18 on 5 ImageNet samples. Results show 2 correct predictions (peacock, mountain bike) and 3 misclassifications (paintbrush→ruler, piggy bank→mousetrap, other).
+
+### Qunatitative Analysis
+
+| Image | Prediction | Correct? | Spearman ρ | Kendall τ | Interpretation |
+|-------|------------|----------|------------|-----------|----------------|
+| Paintbrush | Ruler | ✗ | -0.067 | -0.045 | Negative correlation - methods disagree on features |
+| Peacock | Peacock | ✓ | 0.199 | 0.136 | Low positive - methods weakly agree |
+| Mountain Bike | Mountain Bike | ✓ | 0.180 | 0.125 | Low positive - methods weakly agree |
+| Piggy Bank | Mousetrap | ✗ | 0.101 | 0.068 | Near zero - inconsistent reasoning |
+| Mousetrap | Mousetrap | ✓ | 0.187 | 0.127 | Low positive - methods weakly agree |
+| **Average** | — | — | **0.120** | **0.082** | Overall low agreement |
+
+
+### Qualitative Analysis
+
+For misclassified images like paintbrush→ruler, LIME highlights background texture while SmoothGrad emphasizes edges, showing the model learned spurious linear patterns instead of object shape (negative correlation: -0.067). 
+
+For correct predictions like peacock and mountain bike, both methods show weak positive agreement (≈0.18-0.20) by highlighting semantically relevant features (tail feathers, wheels). 
+LIME provides coarse superpixel regions while SmoothGrad gives fine-grained gradients, capturing complementary information. Low overall correlation (0.120) indicates the methods identify different aspects of model reasoning, with disagreement signaling unreliable predictions.
+
+---
+## Bonus
+
+Traditional reward models overestimate out-of-distribution responses, making it vulnerable to be exploited for high proxy rewards despite low ground-truth quality. PET uses adversarial minimax training to make the reward model pessimistic (underestimate performance), so policies have no incentive to explore unusual responses that would be undervalued. This eliminates exploitation at the reward model itself, rather than limiting policy exploration with KL regularization as in prior work.
